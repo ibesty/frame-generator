@@ -13,24 +13,20 @@ let filelist = [];
 
 const obj = {
   a: {
-    dir: './百万民选-超级流量搜索截图/',
-    title: '百万民选-超级流量 搜索截图'
+    dir: './楼盘广告截图/',
+    subDir: '众盟',
+    title: '楼盘广告截图'
   },
   b: {
-    dir: './百万民选-超级流量各APP截图/',
-    title: '百万民选-超级流量 各APP截图'
-  },
-  c: {
-    dir: './百万民选-超级流量百度信息流截图/',
-    title: '百万民选-超级流量 百度信息流截图'
+    dir: './楼盘广告截图20181229 2/',
+    subDir: '搜索', 
+    title: '楼盘广告截图'
   }
 }
 
-const current = obj['c']
+const current = obj['b']
 
 fileDisplay(current.dir)
-// fileDisplay('./百万民选-超级流量各APP截图/')
-// fileDisplay('./百万民选-超级流量百度信息流截图/')
 
 let total = 0;
 app.use(async ctx => {
@@ -52,13 +48,14 @@ app.use(async ctx => {
   if (p > 8) {
     tempFileList = []
   }
+  console.log(tempFileList)
 
-  tempFileList = tempFileList.sort((a, b) => {
-    if (a.orientation === 'horizontal') {
-      return 1
-    }
-    return -1
-  })
+  // tempFileList = tempFileList.sort((a, b) => {
+  //   if (a.orientation === 'horizontal') {
+  //     return 1
+  //   }
+  //   return -1
+  // })
   
   let redered = nunjucks.render('./index.njk', {
     filelist: tempFileList,
@@ -87,28 +84,26 @@ function fileDisplay(filePath){
                   }else{
                       const isFile = stats.isFile();//是文件
                       const isDir = stats.isDirectory();//是文件夹
-                      if(isFile && filedir.indexOf('DS_Store') < 0){
-                          // console.log('sss',filelist, filedir)
-                          // if (!filelist[filedir]) {
-                          //   filelist[filedir] = []
-                          // }
-
+                      if(isFile && filedir.indexOf('DS_Store') < 0 && filedir.indexOf(current.subDir) >= 0){
+                          // console.log(filedir)
                           getPixels(filedir, function (err, pixles) {
-                            // console.log(pixles.shape);
+                            // console.warn(err, filedir)
                             const shape = pixles.shape;
                             filelist.push({
                               uri: filedir,
-                              orientation: shape[0] > shape[1] ? 'horizontal' : 'vertical'
+                              orientation: shape[0] !== 1080 && shape[0] !== 750 ? 'horizontal' : 'vertical'
                             });
+
+                            filelist = filelist.sort((a, b) => {
+                              if (a.orientation === 'horizontal') {
+                                return 1
+                              }
+                              return -1
+                            })
                           })
                           total ++;
-                          // console.log(total)
-                          // console.log(filePath, filedir);
                       }
                       if(isDir){
-                        // console.log(filedir)
-                          // filelist[filedir] = [];
-                          // console.log(filelist)
                           fileDisplay(filedir);//递归，如果是文件夹，就继续遍历该文件夹下面的文件
                       }
                   }

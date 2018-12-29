@@ -26,7 +26,7 @@
                 flex-wrap: wrap;
                 justify-content: space-evenly;
                 align-items: center;
-                margin-top: 130px;
+                margin-top: 90px;
                 margin-bottom: 100px;
             }
             img {
@@ -64,9 +64,14 @@
                 margin: 100px calc((100vw - 2rem) / 6) 0 calc((100vw - 2rem) / 6);
             }
             .img_item.horizontal {
+                overflow: auto;
+
                 margin-top: 70px;
-                width: 1.78rem;
-                height: 1rem;
+                width: 3.56rem;
+                {# height: 1.5rem; #}
+                height: auto;
+                {# width: 1.78rem;
+                height: 1rem; #}
             }
             .img_item.horizontal ~ .img_item.horizontal {
                 margin-top: 40px !important;
@@ -76,6 +81,11 @@
                 height: 100%;
                 width: 100%;
                 z-index: 100;
+            }
+            .horizontal .img_front {
+                object-fit: contain;
+                height: auto;
+                position: relative;
             }
             .img_bg {
                 width: 114%;
@@ -115,7 +125,7 @@
                         </div>
                     {% else %}
                         <div class="img_item horizontal">
-                            <img class="img_bg" src="手机.png" alt="">
+                            {# <img class="img_bg" src="手机.png" alt=""> #}
                             <img class="img_front" src="{{ item.uri }}" alt="">
                         </div>
                     {% endif %}
